@@ -34,7 +34,7 @@ export default function pagelayout({ children }) {
             flex={{ base: 1 }}
             justify={{ base: "center", md: "start" }}
             marginStart={100}
-            marginTop={10}
+            marginTop={5}
           >
             <Image
               src="/assets/logo.jpeg"
