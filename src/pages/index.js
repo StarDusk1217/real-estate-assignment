@@ -11,6 +11,7 @@ import {
   HStack,
   Input,
   Button,
+  Center,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -59,6 +60,24 @@ function Index() {
     const timer = setInterval(nextSlide, 10000);
     return () => clearInterval(timer);
   }, [index]);
+
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+  const photoList = [
+    "/assets/photo1.png",
+    "/assets/photo2.png",
+    "/assets/photo3.png",
+    "/assets/photo4.png",
+    "/assets/photo5.png",
+    "/assets/photo6.png",
+    "/assets/photo7.png",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhoto((prev) => (prev + 1) % 7); // total 7 photos
+    }, 6000); // rotates every 6 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <PageLayout>
@@ -219,7 +238,6 @@ function Index() {
           ))}
         </HStack>
       </Box>
-
       <Flex w="100%" h="550px" align="center" justify="center">
         <Box w="60%" position="relative">
           <Text fontSize="30px" textAlign="left" fontWeight="bold">
@@ -254,7 +272,6 @@ function Index() {
           </HStack>
         </Box>
       </Flex>
-
       <Flex w="100%" h="550px">
         <Box
           w="65%"
@@ -384,7 +401,6 @@ function Index() {
                   w="300px" // makes the button take full width of the VStack
                   h="60px" // increase height if desired
                   borderRadius="30px" // medium rounded corners
-                  colorScheme="teal" // optional color
                   fontSize="lg" // larger text
                 >
                   SEARCH NOW
@@ -425,6 +441,126 @@ function Index() {
               206-919-6886
             </Text>
           </VStack>
+        </Box>
+      </Flex>
+      <Flex
+        w="100%"
+        h="900px"
+        align="center"
+        justify="center"
+        position="relative"
+        overflow="hidden"
+      >
+        <Text
+          fontFamily="'Cinzel', serif"
+          fontSize="3xl"
+          fontWeight="bold"
+          position="absolute"
+          top="20px"
+          left="50%"
+          transform="translateX(-50%)"
+          color="#161616"
+          zIndex={2}
+          marginTop={9}
+        >
+          Photo Gallery
+        </Text>
+
+        {/* Smaller Photo Gallery Box */}
+        <Box
+          w="70%"
+          h="90%"
+          position="relative"
+          bg="#f0f0f0"
+          borderRadius="md"
+          overflow="hidden"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          marginTop={5}
+          border="2px solid black"
+          role="group" // Enable _groupHover for children
+        >
+          {photoList.map((photo, idx) => (
+            <Image
+              key={idx}
+              src={photo}
+              position="absolute"
+              w="90%"
+              h="90%"
+              objectFit="cover"
+              transition="opacity 0.8s ease-in-out"
+              opacity={idx === currentPhoto ? 1 : 0}
+              zIndex={idx === currentPhoto ? 1 : 0}
+              border="2px solid black"
+              borderRadius="md"
+            />
+          ))}
+
+          {/* Previous Button */}
+          <IconButton
+            icon={<ChevronLeftIcon />}
+            position="absolute"
+            top="50%"
+            left="10px"
+            transform="translateY(-50%)"
+            zIndex={3}
+            onClick={() =>
+              setCurrentPhoto(
+                (prev) => (prev - 1 + photoList.length) % photoList.length
+              )
+            }
+            aria-label="Previous"
+            bg="rgba(0,0,0,0.5)"
+            color="white"
+            _hover={{ bg: "rgba(0,0,0,0.7)" }}
+            opacity={0} // hidden by default
+            transition="opacity 0.3s"
+            _groupHover={{ opacity: 1 }} // show on hover
+          />
+
+          {/* Next Button */}
+          <IconButton
+            icon={<ChevronRightIcon />}
+            position="absolute"
+            top="50%"
+            right="10px"
+            transform="translateY(-50%)"
+            zIndex={3}
+            onClick={() =>
+              setCurrentPhoto((prev) => (prev + 1) % photoList.length)
+            }
+            aria-label="Next"
+            bg="rgba(0,0,0,0.5)"
+            color="white"
+            _hover={{ bg: "rgba(0,0,0,0.7)" }}
+            opacity={0} // hidden by default
+            transition="opacity 0.3s"
+            _groupHover={{ opacity: 1 }} // show on hover
+          />
+
+          {/* Carousel Indicators */}
+          <HStack
+            spacing={3}
+            position="absolute"
+            bottom="15px"
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={3}
+          >
+            {photoList.map((_, idx) => (
+              <Box
+                key={idx}
+                w={idx === currentPhoto ? "10px" : "8px"}
+                h={idx === currentPhoto ? "10px" : "8px"}
+                borderRadius="full"
+                bg={idx === currentPhoto ? "black" : "gray.400"}
+                cursor="pointer"
+                onClick={() => setCurrentPhoto(idx)}
+                transition="all 0.3s"
+              />
+            ))}
+          </HStack>
         </Box>
       </Flex>
     </PageLayout>
