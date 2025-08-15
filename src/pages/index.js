@@ -56,7 +56,7 @@ function Index() {
     setIndex((prev) => (prev - 1 + slides.length) % slides.length);
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 15000);
+    const timer = setInterval(nextSlide, 10000);
     return () => clearInterval(timer);
   }, [index]);
 
@@ -82,7 +82,6 @@ function Index() {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Image */}
             <Image
               src={slides[index].src}
               alt={`Slide ${index + 1}`}
@@ -90,8 +89,6 @@ function Index() {
               h="100%"
               objectFit="cover"
             />
-
-            {/* Overlay */}
             <Box
               position="absolute"
               top="0"
@@ -100,8 +97,6 @@ function Index() {
               h="100%"
               bg="rgba(0,0,0,0.4)"
             />
-
-            {/* Animated Text */}
             {(slides[index].title ||
               slides[index].subtitle ||
               slides[index].paragraph) && (
@@ -200,7 +195,66 @@ function Index() {
           color="white"
           _hover={{ bg: "rgba(0,0,0,0.7)" }}
         />
+
+        {/* Indicators */}
+        <HStack
+          spacing={4}
+          position="absolute"
+          bottom="20px"
+          left="50%"
+          transform="translateX(-50%)"
+          zIndex={2}
+        >
+          {slides.map((_, idx) => (
+            <Box
+              key={idx}
+              w={idx === index ? "10px" : "8px"}
+              h={idx === index ? "10px" : "8px"}
+              borderRadius="full"
+              bg={idx === index ? "white" : "gray.400"}
+              cursor="pointer"
+              onClick={() => setIndex(idx)}
+              transition="all 0.3s"
+            />
+          ))}
+        </HStack>
       </Box>
+
+      <Flex w="100%" h="550px" align="center" justify="center">
+        <Box w="60%" position="relative">
+          <Text fontSize="30px" textAlign="left" fontWeight="bold">
+            // ABOUT
+          </Text>
+          <HStack gap={20}>
+            <VStack spacing={6} align="left">
+              <Text fontSize="lg" textAlign="left" fontWeight="bold">
+                Marci J Metzger
+              </Text>
+              Marci J Metzger
+              <Text fontSize="lg" textAlign="left">
+                Marci was a REALTOR, then licensed Broker, in Washington State.
+                Now, she is enjoying the sunshine, and helping clients in
+                Southern Nevada. Having helped buyers and sellers in many
+                markets since 1995, she is a wealth of knowledge.
+              </Text>
+              <Text fontSize="lg" textAlign="left" fontWeight="bold">
+                In Her Words
+              </Text>
+              <Text fontSize="lg" textAlign="left">
+                "I love that small-town feeling that our community offers.
+                Spectacular golf courses, parks, pool, and easy access to Las
+                Vegas make Pahrump a great place to call home. Working or
+                retired, fast-paced or looking to relax... there's a place for
+                you here! I enjoy living in the Mountain Falls community and
+                will strive to find you a home that will suit you just as this
+                community does me."
+              </Text>
+            </VStack>
+            <Image src="/assets/about.png" width="50%" h="50%" />
+          </HStack>
+        </Box>
+      </Flex>
+
       <Flex w="100%" h="550px">
         <Box
           w="65%"
