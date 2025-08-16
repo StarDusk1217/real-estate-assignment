@@ -13,7 +13,7 @@ import "@fontsource/cinzel/700.css";
 import "@fontsource/source-sans-pro/400.css";
 import "@fontsource/source-sans-pro/700.css";
 
-export default function pagelayout({ children }) {
+export default function Pagelayout({ children }) {
   const cancelRef = React.useRef();
 
   return (
@@ -83,7 +83,7 @@ export default function pagelayout({ children }) {
                 cursor="pointer"
                 _hover={{ color: "gray.500" }}
               >
-                LET'S MOVE
+                {"LET'S MOVE"}
               </Text>
               <Text
                 fontFamily="'Cinzel', serif"

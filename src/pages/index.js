@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import next from "next";
 
 const MotionBox = motion(Box);
 const MotionVStack = motion(VStack);
@@ -87,7 +88,7 @@ function Index() {
   useEffect(() => {
     const timer = setInterval(nextSlide, 10000);
     return () => clearInterval(timer);
-  }, [index]);
+  }, [nextSlide]);
 
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const photoList = [
@@ -324,7 +325,7 @@ function Index() {
                 community does me."
               </Text>
             </VStack>
-            <Image src="/assets/about.png" width="50%" h="50%" />
+            <Image src="/assets/about.png" width="50%" h="50%" alt="about" />
           </HStack>
         </Box>
       </Flex>
@@ -615,7 +616,13 @@ function Index() {
                     overflow="hidden"
                     borderRadius="md"
                   >
-                    <Image src={photo} w="100%" h="100%" objectFit="cover" />
+                    <Image
+                      src={photo}
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
+                      alt="gallery"
+                    />
                   </Box>
                 </MotionBox>
               );
@@ -635,7 +642,7 @@ function Index() {
           </Text>
           <HStack spacing={0} justify="center" align="center">
             <VStack spacing={4} align="center">
-              <Image src="assets/services1.png" />
+              <Image src="assets/services1.png" alt="services1logo" />
               <Text fontWeight="bold" fontSize="2xl" textAlign="center">
                 Real Estate Done Right
               </Text>
@@ -654,7 +661,7 @@ function Index() {
             </VStack>
 
             <VStack spacing={4} align="center">
-              <Image src="assets/services2.png" />
+              <Image src="assets/services2.png" alt="services2logo" />
               <Text fontWeight="bold" fontSize="2xl" textAlign="center">
                 Commercial & Residential
               </Text>
@@ -673,7 +680,7 @@ function Index() {
             </VStack>
 
             <VStack spacing={4} align="center">
-              <Image src="assets/services3.png" />
+              <Image src="assets/services3.png" alt="services3logo" />
               <Text fontWeight="bold" fontSize="2xl" textAlign="center">
                 Rely on Expertise
               </Text>
@@ -702,16 +709,16 @@ function Index() {
         marginTop="20"
       >
         <HStack>
-          <Image src="assets/legal1.png" />
+          <Image src="assets/legal1.png" alt="logo1" />
         </HStack>
         <HStack>
-          <Image src="assets/legal2.png" />
+          <Image src="assets/legal2.png" alt="logo2" />
         </HStack>
         <HStack>
-          <Image src="assets/legal3.png" />
+          <Image src="assets/legal3.png" alt="logo3" />
         </HStack>
         <HStack>
-          <Image src="assets/legal4.png" />
+          <Image src="assets/legal4.png" alt="logo4" />
         </HStack>
       </Flex>
       <Flex w="100%" h="600px" align="center" justify="center">
