@@ -24,86 +24,58 @@ export default function Pagelayout({ children }) {
         display="flex"
         flexDirection="column"
         maxW="2000px"
+        mx="auto"
       >
         {/* HEADER / NAVBAR */}
         <Flex
           h={{ base: "15vh", md: "12vh", lg: "10vh" }}
           w="100%"
+          color="black"
           align="center"
           justify="space-between"
-          px={{ base: 2, md: 4, lg: 6 }}
+          px={{ base: 4, md: 8, lg: 16 }}
         >
-          <Flex
-            flex={{ base: 1 }}
-            justify={{ base: "center", md: "start" }}
-            marginStart={100}
-            marginTop={5}
-          >
+          {/* Logo */}
+          <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
             <Image
               src="/assets/logo.jpeg"
               alt="POS System Logo"
-              width={{ base: "120px", md: "250px", lg: "350px" }} // mobile, tablet, desktop
+              width={{ base: "120px", md: "250px", lg: "350px" }}
               height="auto"
               objectFit="contain"
             />
           </Flex>
 
-          <Flex
-            flex={{ base: 1 }}
-            justify={{ base: "center", md: "flex-end" }}
-            mt={{ base: 2, md: 5 }}
-            mr={{ base: 2, md: 100 }}
-          >
-            <HStack spacing={{ base: 4, md: 6 }} wrap="wrap">
-              <Text
-                fontFamily="'Cinzel', serif"
-                fontSize={{ base: "md", md: "2xl" }}
-                fontWeight="thin"
-                cursor="pointer"
-                _hover={{ color: "gray.500" }} // optional hover effect
-              >
-                HOME
-              </Text>
-              <Text
-                fontFamily="'Cinzel', serif"
-                fontSize={{ base: "md", md: "2xl" }}
-                fontWeight="medium"
-                cursor="pointer"
-                _hover={{ color: "gray.500" }}
-              >
-                LISTINGS
-              </Text>
-              <Text
-                fontFamily="'Cinzel', serif"
-                fontSize={{ base: "md", md: "2xl" }}
-                fontWeight="medium"
-                cursor="pointer"
-                _hover={{ color: "gray.500" }}
-              >
-                {"LET'S MOVE"}
-              </Text>
-              <Text
-                fontFamily="'Cinzel', serif"
-                fontSize={{ base: "md", md: "2xl" }}
-                fontWeight="medium"
-                cursor="pointer"
-                _hover={{ color: "gray.500" }}
-              >
-                ABOUT US
-              </Text>
+          {/* Navigation */}
+          <Flex flex={{ base: 1 }} justify={{ base: "center", md: "flex-end" }}>
+            <HStack spacing={{ base: 3, md: 6 }} wrap="wrap" textAlign="center">
+              {["HOME", "LISTINGS", "LET'S MOVE", "ABOUT US"].map(
+                (item, index) => (
+                  <Text
+                    key={index}
+                    fontFamily="'Cinzel', serif"
+                    fontSize={{ base: "md", md: "2xl" }}
+                    fontWeight="medium"
+                    cursor="pointer"
+                    _hover={{ color: "gray.500" }}
+                  >
+                    {item}
+                  </Text>
+                )
+              )}
             </HStack>
           </Flex>
         </Flex>
 
         {/* MAIN CONTENT AREA */}
         <VStack
-          width={{ base: "90%", md: "95%", lg: "100%" }}
+          width={{ base: "80%", md: "90%", lg: "100%" }}
           bg="#FFFFFF"
           flex="1"
           mt={5}
           align="stretch"
           spacing={0}
-          mx="auto" // centers content horizontally
+          mx="auto"
         >
           {children}
         </VStack>
