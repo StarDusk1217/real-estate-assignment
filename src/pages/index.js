@@ -12,9 +12,9 @@ import {
   HStack,
   Input,
   Button,
-  Center,
   chakra,
   Textarea,
+  Stack,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -105,6 +105,14 @@ function Index() {
     "/assets/photo7.png",
   ];
 
+  const getX = (position) => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768) return position * 180; // mobile
+      if (window.innerWidth < 1024) return position * 200; // tablet
+    }
+    return position * 220; // desktop
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPhoto((prev) => (prev + 1) % 7); // total 7 photos
@@ -112,13 +120,15 @@ function Index() {
     return () => clearInterval(interval);
   }, []);
 
+  const [showForm, setShowForm] = useState(false);
+
   return (
     <PageLayout>
       <Box
         position="relative"
         maxW="2000px"
         w="100%"
-        h="750px"
+        h={{ base: "400px", md: "600px", lg: "750px" }} // responsive height
         role="group"
         overflow="hidden"
         m={0}
@@ -156,55 +166,68 @@ function Index() {
                 <MotionVStack
                   key={slides[index].title}
                   position="absolute"
-                  top="50%"
-                  left={
-                    slides[index].textPosition === "center"
-                      ? "30%"
-                      : slides[index].textPosition === "left"
-                      ? "15%"
-                      : "auto"
-                  }
-                  right={
-                    slides[index].textPosition === "right" ? "15%" : "auto"
-                  }
-                  transform={
-                    slides[index].textPosition === "center"
-                      ? "translate(-50%, -50%)"
-                      : "translateY(-50%)"
-                  }
-                  alignItems={
-                    slides[index].textPosition === "center"
-                      ? "center"
-                      : slides[index].textPosition === "left"
-                      ? "flex-start"
-                      : "flex-end"
-                  }
+                  top={{ base: "40%", md: "50%" }} // moves up slightly on mobile
+                  left={{
+                    base: "10%",
+                    md:
+                      slides[index].textPosition === "center"
+                        ? "30%"
+                        : slides[index].textPosition === "left"
+                        ? "15%"
+                        : "auto",
+                  }}
+                  right={{
+                    base: "10%",
+                    md: slides[index].textPosition === "right" ? "15%" : "auto",
+                  }}
+                  transform={{
+                    base: "translate(-50%, -50%)",
+                    md:
+                      slides[index].textPosition === "center"
+                        ? "translate(-50%, -50%)"
+                        : "translateY(-50%)",
+                  }}
+                  alignItems={{
+                    base: "center",
+                    md:
+                      slides[index].textPosition === "center"
+                        ? "center"
+                        : slides[index].textPosition === "left"
+                        ? "flex-start"
+                        : "flex-end",
+                  }}
                   spacing={4}
-                  textAlign={
-                    slides[index].textPosition === "center"
-                      ? "center"
-                      : slides[index].textPosition === "left"
-                      ? "left"
-                      : "right"
-                  }
+                  textAlign={{
+                    base: "center",
+                    md:
+                      slides[index].textPosition === "center"
+                        ? "center"
+                        : slides[index].textPosition === "left"
+                        ? "left"
+                        : "right",
+                  }}
                   color="white"
                   fontFamily="'Cinzel', serif"
-                  maxW="80%"
+                  maxW={{ base: "90%", md: "80%" }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
                   {slides[index].title && (
-                    <Text fontSize={35}>{slides[index].title}</Text>
+                    <Text fontSize={{ base: "20px", md: 35 }}>
+                      {slides[index].title}
+                    </Text>
                   )}
                   {slides[index].subtitle && (
-                    <Text fontSize={50}>{slides[index].subtitle}</Text>
+                    <Text fontSize={{ base: "28px", md: 50 }}>
+                      {slides[index].subtitle}
+                    </Text>
                   )}
                   {slides[index].paragraph && (
                     <Text
-                      fontSize={25}
-                      maxW="900px"
+                      fontSize={{ base: "16px", md: 25 }}
+                      maxW={{ base: "300px", md: "900px" }}
                       fontFamily="'Source Sans Pro', sans-serif"
                       textTransform="none"
                     >
@@ -222,7 +245,7 @@ function Index() {
           icon={<ChevronLeftIcon />}
           position="absolute"
           top="50%"
-          left="20px"
+          left={{ base: "5px", md: "20px" }}
           transform="translateY(-50%)"
           onClick={prevSlide}
           aria-label="Previous Slide"
@@ -233,6 +256,7 @@ function Index() {
           bg="rgba(0,0,0,0.5)"
           color="white"
           _hover={{ bg: "rgba(0,0,0,0.7)" }}
+          size={{ base: "sm", md: "md" }}
         />
 
         {/* Right Arrow */}
@@ -240,7 +264,7 @@ function Index() {
           icon={<ChevronRightIcon />}
           position="absolute"
           top="50%"
-          right="20px"
+          right={{ base: "5px", md: "20px" }}
           transform="translateY(-50%)"
           onClick={nextSlide}
           aria-label="Next Slide"
@@ -251,11 +275,12 @@ function Index() {
           bg="rgba(0,0,0,0.5)"
           color="white"
           _hover={{ bg: "rgba(0,0,0,0.7)" }}
+          size={{ base: "sm", md: "md" }}
         />
 
         {/* Indicators */}
         <HStack
-          spacing={4}
+          spacing={{ base: 2, md: 4 }}
           position="absolute"
           bottom="20px"
           left="50%"
@@ -265,8 +290,16 @@ function Index() {
           {slides.map((_, idx) => (
             <Box
               key={idx}
-              w={idx === index ? "10px" : "8px"}
-              h={idx === index ? "10px" : "8px"}
+              w={
+                idx === index
+                  ? { base: "8px", md: "10px" }
+                  : { base: "6px", md: "8px" }
+              }
+              h={
+                idx === index
+                  ? { base: "8px", md: "10px" }
+                  : { base: "6px", md: "8px" }
+              }
               borderRadius="full"
               bg={idx === index ? "white" : "gray.400"}
               cursor="pointer"
@@ -276,29 +309,45 @@ function Index() {
           ))}
         </HStack>
       </Box>
-      <Flex w="100%" h="550px" align="center" justify="center">
-        <Box w="60%" position="relative">
+
+      <Flex
+        w="100%"
+        minH={{ base: "auto", md: "550px" }}
+        align="center"
+        justify="center"
+        px={{ base: 4, md: 8, lg: 16 }}
+        py={{ base: 8, md: 12, lg: 0 }}
+      >
+        <Box w={{ base: "100%", md: "80%", lg: "60%" }} position="relative">
           <Text
-            fontSize="30px"
+            fontSize={{ base: "2xl", md: "3xl", lg: "30px" }}
             textAlign="left"
             fontWeight="bold"
             fontFamily="'Cinzel', serif"
+            mb={{ base: 4, md: 6 }}
           >
-            {/* ABOUT */}
+            ABOUT
           </Text>
-          <HStack gap={20}>
-            <VStack spacing={6} align="left">
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            gap={{ base: 6, md: 12, lg: 20 }}
+            align="center"
+          >
+            {/* Text Content */}
+            <VStack
+              spacing={{ base: 4, md: 6, lg: 6 }}
+              align="flex-start"
+              w={{ base: "100%", md: "50%" }}
+            >
               <Text
-                fontSize="2xl"
-                textAlign="left"
+                fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
                 fontWeight="bold"
                 fontFamily="'Cinzel', serif"
               >
                 Marci J Metzger
               </Text>
               <Text
-                fontSize="lg"
-                textAlign="left"
+                fontSize={{ base: "sm", md: "md", lg: "lg" }}
                 fontFamily="'Source Sans Pro', sans-serif"
               >
                 Marci was a REALTOR, then licensed Broker, in Washington State.
@@ -307,16 +356,14 @@ function Index() {
                 markets since 1995, she is a wealth of knowledge.
               </Text>
               <Text
-                fontSize="2xl"
-                textAlign="left"
+                fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
                 fontWeight="bold"
                 fontFamily="'Cinzel', serif"
               >
                 In Her Words
               </Text>
               <Text
-                fontSize="lg"
-                textAlign="left"
+                fontSize={{ base: "sm", md: "md", lg: "lg" }}
                 fontFamily="'Source Sans Pro', sans-serif"
               >
                 &quot;I love that small-town feeling that our community offers.
@@ -328,50 +375,66 @@ function Index() {
                 community does me.&quot;
               </Text>
             </VStack>
-            <Image src="/assets/about.png" width="50%" h="50%" alt="about" />
-          </HStack>
+
+            {/* Image */}
+            <Box
+              w={{ base: "100%", md: "50%" }}
+              display="flex"
+              justifyContent={{ base: "center", md: "flex-end" }}
+            >
+              <Image
+                src="/assets/about.png"
+                maxW={{ base: "80%", md: "70%", lg: "100%" }}
+                h="auto"
+                alt="about"
+              />
+            </Box>
+          </Flex>
         </Box>
       </Flex>
 
-      <Flex w="100%" h="550px">
+      <Flex
+        w="100%"
+        direction={{ base: "column", md: "row" }} // stack on mobile/tablet, side-by-side on desktop
+        h={{ base: "auto", md: "550px" }}
+      >
+        {/* Left Side */}
         <Box
-          w="65%"
-          bg="gray.100"
-          align="center"
-          justify="center"
+          w={{ base: "100%", md: "65%" }}
           position="relative"
-          background="white"
+          bg="white"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
           {/* Background Image */}
           <Image
             src="/assets/images6.png"
             width="100%"
-            h="100%"
+            h={{ base: "300px", md: "550px" }}
             objectFit="cover"
             alt="Left Side Image"
           />
-
-          {/* Dark Grey Overlay */}
+          {/* Dark Overlay */}
           <Box
             position="absolute"
-            top="0"
-            left="0"
+            top={0}
+            left={0}
             w="100%"
             h="100%"
-            bg="rgba(0, 0, 0, 0.5)"
+            bg="rgba(0,0,0,0.5)"
           />
-
-          {/* Text Above White Box */}
+          {/* Text */}
           <Box
             position="absolute"
-            top="10%" // adjust vertical position
+            top={{ base: "30%", md: "10%" }}
             left="50%"
             transform="translateX(-50%)"
             zIndex={2}
           >
             <Text
               fontFamily="'Cinzel', serif"
-              fontSize="3xl"
+              fontSize={{ base: "2xl", md: "3xl" }}
               fontWeight="bold"
               color="white"
               textAlign="center"
@@ -380,89 +443,161 @@ function Index() {
             </Text>
           </Box>
 
-          {/* White Center Box */}
+          {/* Explore Button for Mobile & Tablet */}
+          {!showForm && (
+            <Button
+              display={{ base: "block", md: "block", lg: "none" }}
+              position="absolute"
+              top={{ base: "60%", md: "65%" }}
+              left="50%"
+              transform="translateX(-50%)"
+              zIndex={2}
+              colorScheme="teal"
+              size="lg"
+              onClick={() => setShowForm(true)}
+            >
+              Explore
+            </Button>
+          )}
+
+          {/* Search Form */}
           <Box
+            display={{ base: showForm ? "block" : "none", lg: "block" }}
             position="absolute"
-            top="60%"
+            top={{ base: "70%", md: "60%", lg: "60%" }}
             left="50%"
             transform="translate(-50%, -50%)"
             bg="white"
-            p={8}
-            minW="1000px"
-            minH="350px"
+            p={{ base: 4, md: 6, lg: 8 }}
+            w={{ base: "90%", md: "80%", lg: "1000px" }}
+            minH={{ base: "auto", md: "350px", lg: "350px" }}
             borderRadius="md"
             boxShadow="lg"
             zIndex={3}
           >
-            {/* SEARCH LISTINGS Text */}
+            {/* Close Button for Mobile & Tablet */}
+            {showForm && (
+              <Button
+                display={{ base: "block", md: "block", lg: "none" }}
+                position="absolute"
+                top={2}
+                right={2}
+                size="sm"
+                bg="white"
+                onClick={() => setShowForm(false)}
+              >
+                X
+              </Button>
+            )}
             <Text
               fontFamily="'Cinzel', serif"
-              fontSize="xl"
+              fontSize={{ base: "lg", md: "xl", lg: "xl" }}
               fontWeight="bold"
               color="#a68786"
               textAlign="left"
-              mb={6} // spacing below
+              mb={{ base: 4, md: 6, lg: 6 }}
             >
               SEARCH LISTINGS
             </Text>
 
             {/* Form Fields */}
-            <Flex gap={8} marginBottom={10}>
-              {/* Location */}
-              <VStack align="start" w="1/3">
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              gap={{ base: 4, md: 8 }}
+              mb={{ base: 4, md: 10 }}
+              flexWrap="wrap"
+            >
+              <VStack align="start" w={{ base: "100%", md: "30%" }}>
                 <Text fontWeight="medium">Location</Text>
-                <Select size="lg" w="300px" fontSize="lg"></Select>
+                <Select
+                  size="lg"
+                  w={{ base: "100%", md: "300px", lg: "300px" }}
+                  fontSize="lg"
+                />
               </VStack>
-
-              {/* Type */}
-              <VStack align="start" w="1/3">
+              <VStack align="start" w={{ base: "100%", md: "30%" }}>
                 <Text fontWeight="medium">Type</Text>
-                <Select size="lg" w="300px" fontSize="lg">
+                <Select
+                  size="lg"
+                  w={{ base: "100%", md: "300px", lg: "300px" }}
+                  fontSize="lg"
+                >
                   <option value=""></option>
                 </Select>
               </VStack>
-
-              {/* Sort By */}
-              <VStack align="start" w="1/3">
+              <VStack align="start" w={{ base: "100%", md: "30%" }}>
                 <Text fontWeight="medium">Sort By</Text>
-                <Select size="lg" w="300px" fontSize="lg">
+                <Select
+                  size="lg"
+                  w={{ base: "100%", md: "300px", lg: "300px" }}
+                  fontSize="lg"
+                >
                   <option value=""></option>
                 </Select>
               </VStack>
             </Flex>
-            <HStack gap={8}>
-              <VStack align="start" w="1/3">
+
+            <HStack
+              spacing={{ base: 4, md: 8 }}
+              wrap={{ base: "wrap", md: "nowrap" }}
+            >
+              {/* Bedrooms */}
+              <VStack
+                align="start"
+                w={{ base: "45%", md: "130px", lg: "130px" }}
+              >
                 <Text fontWeight="medium">Bedrooms</Text>
-                <Select size="lg" w="130px" fontSize="lg">
+                <Select size="lg" w="100%" fontSize="lg">
                   <option value=""></option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </Select>
               </VStack>
-              <VStack align="start" w="1/3">
+
+              {/* Baths */}
+              <VStack
+                align="start"
+                w={{ base: "45%", md: "130px", lg: "130px" }}
+              >
                 <Text fontWeight="medium">Baths</Text>
-                <Select size="lg" w="130px" fontSize="lg">
+                <Select size="lg" w="100%" fontSize="lg">
                   <option value=""></option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </Select>
               </VStack>
-              <VStack align="start" w="1/3">
+
+              {/* Min Price */}
+              <VStack
+                align="start"
+                w={{ base: "45%", md: "140px", lg: "140px" }}
+              >
                 <Text fontWeight="medium">Min Price</Text>
-                <Input w="140px" variant="flushed" />
+                <Input w="100%" variant="flushed" />
               </VStack>
-              <VStack align="start" w="1/3">
+
+              {/* Max Price */}
+              <VStack
+                align="start"
+                w={{ base: "45%", md: "140px", lg: "140px" }}
+              >
                 <Text fontWeight="medium">Max Price</Text>
-                <Input w="140px" variant="flushed" />
+                <Input w="100%" variant="flushed" />
               </VStack>
-              <VStack align="start" w="1/3">
+
+              {/* Search Button */}
+              <VStack
+                align="start"
+                w={{ base: "100%", md: "auto", lg: "auto" }}
+                pt={{ base: 2, md: 0 }}
+              >
                 <Button
-                  w="300px" // makes the button take full width of the VStack
-                  h="60px" // increase height if desired
-                  borderRadius="30px" // medium rounded corners
-                  fontSize="lg" // larger text
+                  w={{ base: "100%", md: "140px", lg: "240px" }}
+                  h={{ base: "50px", md: "50px", lg: "50px" }}
+                  borderRadius="30px"
+                  fontSize="lg"
                 >
                   SEARCH NOW
                 </Button>
@@ -471,42 +606,59 @@ function Index() {
           </Box>
         </Box>
 
-        {/* Right Side (25%) */}
+        {/* Right Side */}
         <Box
-          w="35%"
+          w={{ base: "100%", md: "35%" }}
           bg="#161616"
           p={6}
           display="flex"
           alignItems="center"
           justifyContent="center"
-          fontFamily="'Cinzel', serif" // All text in Cinzel
+          fontFamily="'Cinzel', serif"
+          mt={{ base: 6, md: 0 }} // add margin-top for stacked mobile/tablet
         >
           <VStack alignItems="center" justifyContent="center">
-            <Text color="white" mb={4} textAlign="center" fontSize={25}>
+            <Text
+              color="white"
+              mb={4}
+              textAlign="center"
+              fontSize={{ base: 20, md: 25 }}
+            >
               MARCI METZGER
             </Text>
 
             <Image
               src="/assets/marci.png"
-              boxSize="300px" // Equal width & height for a circle
-              objectFit="cover" // Fill the shape without distortion
-              borderRadius="full" // Makes it a perfect circle
+              boxSize={{ base: "200px", md: "300px" }}
+              objectFit="cover"
+              borderRadius="full"
               alt="Marci Metzger"
             />
 
-            <Text color="white" mb={4} textAlign="center" fontSize={20}>
+            <Text
+              color="white"
+              mb={4}
+              textAlign="center"
+              fontSize={{ base: 16, md: 20 }}
+            >
               REALTOR FOR NEARLY 3 DECADES!
             </Text>
 
-            <Text color="white" mb={0} textAlign="center" fontSize={20}>
+            <Text
+              color="white"
+              mb={0}
+              textAlign="center"
+              fontSize={{ base: 16, md: 20 }}
+            >
               206-919-6886
             </Text>
           </VStack>
         </Box>
       </Flex>
+
       <Flex
         w="100%"
-        h="900px"
+        h={{ base: "auto", md: "900px", lg: "900px" }}
         align="center"
         justify="center"
         position="relative"
@@ -514,10 +666,10 @@ function Index() {
       >
         <Text
           fontFamily="'Cinzel', serif"
-          fontSize="3xl"
+          fontSize={{ base: "2xl", md: "3xl", lg: "3xl" }}
           fontWeight="bold"
           position="absolute"
-          top="50px"
+          top={{ base: "20px", md: "50px", lg: "50px" }}
           left="50%"
           transform="translateX(-50%)"
           color="#161616"
@@ -529,22 +681,24 @@ function Index() {
 
         {/* Smaller Photo Gallery Box */}
         <Box
-          w="80%"
-          h="800px"
+          w={{ base: "95%", md: "80%", lg: "80%" }}
+          h={{ base: "400px", md: "800px", lg: "800px" }}
           position="relative"
           margin="auto"
-          overflow="visible"
-          mt={10}
+          overflow="hidden"
+          mt={{ base: 6, md: 10, lg: 10 }}
           bg="#e8dfd2"
           borderRadius="md"
-          role="group" // enable group hover for buttons
+          role="group"
         >
           {/* Previous Button */}
           <IconButton
-            icon={<ChevronLeftIcon color="black" boxSize={8} />}
+            icon={
+              <ChevronLeftIcon color="black" boxSize={{ base: 5, md: 8 }} />
+            }
             position="absolute"
             top="50%"
-            left="10px"
+            left={{ base: "5px", md: "10px", lg: "10px" }}
             transform="translateY(-50%)"
             zIndex={5}
             onClick={() =>
@@ -555,17 +709,19 @@ function Index() {
             aria-label="Previous Photo"
             bg="transparent"
             _hover={{ bg: "transparent" }}
-            opacity={0} // initially hidden
+            opacity={0}
             transition="opacity 0.3s ease"
-            _groupHover={{ opacity: 1 }} // show on hover
+            _groupHover={{ opacity: 1 }}
           />
 
           {/* Next Button */}
           <IconButton
-            icon={<ChevronRightIcon color="black" boxSize={8} />}
+            icon={
+              <ChevronRightIcon color="black" boxSize={{ base: 5, md: 8 }} />
+            }
             position="absolute"
             top="50%"
-            right="10px"
+            right={{ base: "5px", md: "10px", lg: "10px" }}
             transform="translateY(-50%)"
             zIndex={5}
             onClick={() =>
@@ -574,9 +730,9 @@ function Index() {
             aria-label="Next Photo"
             bg="transparent"
             _hover={{ bg: "transparent" }}
-            opacity={0} // initially hidden
+            opacity={0}
             transition="opacity 0.3s ease"
-            _groupHover={{ opacity: 1 }} // show on hover
+            _groupHover={{ opacity: 1 }}
           />
 
           <AnimatePresence initial={false}>
@@ -584,7 +740,6 @@ function Index() {
               let position = idx - currentPhoto;
               const half = Math.floor(photoList.length / 2);
 
-              // Circular wrap-around
               if (position < -half) position += photoList.length;
               if (position > half) position -= photoList.length;
 
@@ -592,31 +747,30 @@ function Index() {
                 <MotionBox
                   key={idx}
                   position="absolute"
-                  top="20%"
-                  left="25%"
-                  w="800px"
-                  h="530px" // taller card height
+                  top={{ base: "5%", md: "20%", lg: "20%" }}
+                  left={{ base: "5%", md: "10%", lg: "25%" }}
+                  w={{ base: "90%", md: "500px", lg: "800px" }}
+                  h={{ base: "250px", md: "530px", lg: "530px" }}
                   borderRadius="md"
                   overflow="hidden"
                   boxShadow="lg"
-                  bg="white" // card background
+                  bg="white"
                   cursor="default"
                   zIndex={position === 0 ? 2 : 1}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{
                     opacity: Math.abs(position) > 1 ? 0 : 1,
                     scale: position === 0 ? 1 : 0.8,
-                    x: position * 220,
+                    x: getX(position),
                     rotateY: position * 20,
                   }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                 >
-                  {/* Inner image box */}
                   <Box
                     w="100%"
-                    h="500px" // keep the image height fixed
-                    p={4}
+                    h={{ base: "360px", md: "500px", lg: "500px" }}
+                    p={{ base: 2, md: 4, lg: 4 }}
                     overflow="hidden"
                     borderRadius="md"
                   >
@@ -634,28 +788,53 @@ function Index() {
           </AnimatePresence>
         </Box>
       </Flex>
-      <Flex w="100%" h="550px" align="center" justify="center" p="36">
-        <VStack>
+
+      <Flex
+        w="100%"
+        h={{ base: "auto", md: "550px", lg: "550px" }}
+        align="center"
+        justify="center"
+        p={{ base: 6, md: 36, lg: 36 }}
+      >
+        <VStack spacing={{ base: 10, md: 10, lg: 10 }}>
           <Text
             fontFamily="'Cinzel', serif"
-            fontSize="5xl"
-            marginTop="20"
-            marginBottom="10"
+            fontSize={{ base: "3xl", md: "5xl", lg: "5xl" }}
+            marginTop={{ base: 8, md: 20, lg: 20 }}
+            marginBottom={{ base: 6, md: 10, lg: 10 }}
+            textAlign="center"
           >
             OUR SERVICES
           </Text>
-          <HStack spacing={0} justify="center" align="center">
-            <VStack spacing={4} align="center">
-              <Image src="assets/services1.png" alt="services1logo" />
-              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+
+          <HStack
+            spacing={{ base: 0, md: 0 }}
+            justify="center"
+            align="center"
+            flexDirection={{ base: "column", md: "row", lg: "row" }}
+          >
+            <VStack
+              spacing={{ base: 4, md: 4, lg: 4 }}
+              align="center"
+              w={{ base: "90%", md: "auto", lg: "auto" }}
+            >
+              <Image
+                src="assets/services1.png"
+                alt="services1logo"
+                boxSize={{ base: "120px", md: "auto" }}
+              />
+              <Text
+                fontWeight="bold"
+                fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
+                textAlign="center"
+              >
                 Real Estate Done Right
               </Text>
               <Text
-                fontSize="lg"
+                fontSize={{ base: "sm", md: "lg", lg: "lg" }}
                 textAlign="center"
                 fontFamily="'Source Sans Pro', sans-serif"
-                marginLeft="20"
-                marginRight="20"
+                mx={{ base: 4, md: 20, lg: 20 }}
               >
                 Nervous about your property adventure? Don&apos;t be. Whether
                 you&apos;re getting ready to buy or sell your residence, looking
@@ -664,17 +843,28 @@ function Index() {
               </Text>
             </VStack>
 
-            <VStack spacing={4} align="center">
-              <Image src="assets/services2.png" alt="services2logo" />
-              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+            <VStack
+              spacing={{ base: 4, md: 4, lg: 4 }}
+              align="center"
+              w={{ base: "90%", md: "auto", lg: "auto" }}
+            >
+              <Image
+                src="assets/services2.png"
+                alt="services2logo"
+                boxSize={{ base: "120px", md: "auto" }}
+              />
+              <Text
+                fontWeight="bold"
+                fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
+                textAlign="center"
+              >
                 Commercial & Residential
               </Text>
               <Text
-                fontSize="lg"
+                fontSize={{ base: "sm", md: "lg", lg: "lg" }}
                 textAlign="center"
                 fontFamily="'Source Sans Pro', sans-serif"
-                marginLeft="20"
-                marginRight="20"
+                mx={{ base: 4, md: 20, lg: 20 }}
               >
                 Large or small, condo or mansion, we can find it and get at the
                 price that&apos;s right. Fixer-uppers? Luxury? We can help with
@@ -683,17 +873,28 @@ function Index() {
               </Text>
             </VStack>
 
-            <VStack spacing={4} align="center">
-              <Image src="assets/services3.png" alt="services3logo" />
-              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+            <VStack
+              spacing={{ base: 4, md: 4, lg: 4 }}
+              align="center"
+              w={{ base: "90%", md: "auto", lg: "auto" }}
+            >
+              <Image
+                src="assets/services3.png"
+                alt="services3logo"
+                boxSize={{ base: "120px", md: "auto" }}
+              />
+              <Text
+                fontWeight="bold"
+                fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
+                textAlign="center"
+              >
                 Rely on Expertise
               </Text>
               <Text
-                fontSize="lg"
+                fontSize={{ base: "sm", md: "lg", lg: "lg" }}
                 textAlign="center"
                 fontFamily="'Source Sans Pro', sans-serif"
-                marginLeft="20"
-                marginRight="20"
+                mx={{ base: 4, md: 20, lg: 20 }}
               >
                 If you have questions about affordability, credit, and loan
                 options, trust us to connect you with the right people to get
@@ -704,40 +905,84 @@ function Index() {
           </HStack>
         </VStack>
       </Flex>
+
       <Flex
         w="100%"
-        h="400px"
+        flexDirection={{ base: "column", md: "row", lg: "row" }}
         align="center"
-        justify="center"
-        justifyContent="space-evenly"
-        marginTop="20"
+        justify={{ base: "center", md: "space-around", lg: "space-evenly" }}
+        mt={{ base: 10, md: 20, lg: 48 }}
+        gap={{ base: 6, md: 10, lg: 0 }}
       >
-        <HStack>
-          <Image src="assets/legal1.png" alt="logo1" />
+        <HStack w={{ base: "80%", md: "auto", lg: "auto" }} justify="center">
+          <Image
+            src="assets/legal1.png"
+            alt="logo1"
+            boxSize={{ base: "80px", md: "100px", lg: "120px" }}
+          />
         </HStack>
-        <HStack>
-          <Image src="assets/legal2.png" alt="logo2" />
+        <HStack w={{ base: "80%", md: "auto", lg: "auto" }} justify="center">
+          <Image
+            src="assets/legal2.png"
+            alt="logo2"
+            boxSize={{ base: "80px", md: "100px", lg: "120px" }}
+          />
         </HStack>
-        <HStack>
-          <Image src="assets/legal3.png" alt="logo3" />
+        <HStack w={{ base: "80%", md: "auto", lg: "auto" }} justify="center">
+          <Image
+            src="assets/legal3.png"
+            alt="logo3"
+            boxSize={{ base: "80px", md: "100px", lg: "120px" }}
+          />
         </HStack>
-        <HStack>
-          <Image src="assets/legal4.png" alt="logo4" />
+        <HStack w={{ base: "80%", md: "auto", lg: "auto" }} justify="center">
+          <Image
+            src="assets/legal4.png"
+            alt="logo4"
+            boxSize={{ base: "80px", md: "100px", lg: "120px" }}
+          />
         </HStack>
       </Flex>
-      <Flex w="100%" h="600px" align="center" justify="center">
-        <Box w="80%" h="100%" padding={10}>
-          <VStack w="100%" spacing={8} align="center">
-            <Text fontSize="4xl" fontWeight="bold" fontFamily="'Cinzel', serif">
+
+      <Flex
+        w="100%"
+        h={{ base: "auto", md: "600px", lg: "600px" }}
+        align="center"
+        justify="center"
+        p={{ base: 4, md: 10, lg: 10 }}
+      >
+        <Box
+          w={{ base: "95%", md: "80%", lg: "80%" }}
+          h="100%"
+          p={{ base: 4, md: 10, lg: 10 }}
+        >
+          <VStack w="100%" spacing={{ base: 6, md: 8, lg: 8 }} align="center">
+            <Text
+              fontSize={{ base: "3xl", md: "4xl", lg: "4xl" }}
+              fontWeight="bold"
+              fontFamily="'Cinzel', serif"
+              textAlign="center"
+            >
               CALL OR VISIT
             </Text>
 
             {/* Main content: Form + Contact Info */}
-            <HStack w="100%" spacing={12} align="start" justify="space-between">
+            <Stack
+              direction={{ base: "column", md: "row", lg: "row" }}
+              w="100%"
+              spacing={{ base: 8, md: 12, lg: 12 }}
+              align={{ base: "center", md: "start", lg: "start" }}
+              justify="space-between"
+            >
               {/* Form Section */}
-              <VStack w="50%" spacing={6} align="stretch" padding={5}>
+              <VStack
+                w={{ base: "100%", md: "50%", lg: "50%" }}
+                spacing={6}
+                align="stretch"
+                p={5}
+              >
                 <Text
-                  fontSize="2xl"
+                  fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
                   fontWeight="medium"
                   textAlign="left"
                   fontFamily="'Source Sans Pro', sans-serif"
@@ -749,7 +994,7 @@ function Index() {
                   <Input
                     className="peer"
                     placeholder=" "
-                    size="lg"
+                    size="md"
                     variant="flushed"
                   />
                   <Label fontFamily="'Source Sans Pro', sans-serif">Name</Label>
@@ -759,7 +1004,7 @@ function Index() {
                   <Input
                     className="peer"
                     placeholder=" "
-                    size="lg"
+                    size="md"
                     variant="flushed"
                   />
                   <Label fontFamily="'Source Sans Pro', sans-serif">
@@ -771,7 +1016,7 @@ function Index() {
                   <Textarea
                     className="peer"
                     placeholder=" "
-                    size="lg"
+                    size="md"
                     variant="flushed"
                   />
                   <Label fontFamily="'Source Sans Pro', sans-serif">
@@ -780,68 +1025,87 @@ function Index() {
                 </Box>
 
                 <Button
-                  w="150px"
-                  h="60px"
+                  w={{ base: "120px", md: "150px", lg: "150px" }}
+                  h={{ base: "50px", md: "60px", lg: "60px" }}
                   borderRadius="30px"
-                  fontSize="md"
+                  fontSize={{ base: "sm", md: "md", lg: "md" }}
                   alignSelf="center"
                   fontFamily="'Source Sans Pro', sans-serif"
                 >
                   SEND
                 </Button>
-                <Text fontSize="sm" textAlign="center">
+
+                <Text
+                  fontSize={{ base: "xs", md: "sm", lg: "sm" }}
+                  textAlign="center"
+                >
                   This site is protected by reCAPTCHA and the Google Privacy
                   Policy and Terms of Service apply.
                 </Text>
               </VStack>
 
               {/* Contact Info Section */}
-              <VStack w="50%" spacing={6} align="start" padding={5}>
-                <VStack align="start" spacing={8}>
+              <VStack
+                w={{ base: "100%", md: "50%", lg: "50%" }}
+                spacing={6}
+                align={{ base: "center", md: "start", lg: "start" }}
+                p={5}
+              >
+                <VStack
+                  align={{ base: "center", md: "start", lg: "start" }}
+                  spacing={6}
+                >
                   <Text
                     fontWeight="bold"
-                    fontSize="2xl"
+                    fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
                     fontFamily="'Cinzel', serif"
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     Marci Metzger - THE RIDGE REALTY GROUP
                   </Text>
                   <Text
                     fontFamily="'Source Sans Pro', sans-serif"
-                    fontSize="xl"
+                    fontSize={{ base: "sm", md: "xl", lg: "xl" }}
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     3190 HW-160, Suite F, Pahrump, Nevada 89048, United States
                   </Text>
                   <Text
                     fontFamily="'Source Sans Pro', sans-serif"
-                    fontSize="xl"
+                    fontSize={{ base: "sm", md: "xl", lg: "xl" }}
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     (206) 919-6886
                   </Text>
                 </VStack>
-                <VStack align="start">
+
+                <VStack align={{ base: "center", md: "start", lg: "start" }}>
                   <Text
                     fontWeight="bold"
                     fontFamily="'Cinzel', serif"
-                    fontSize="2xl"
+                    fontSize={{ base: "xl", md: "2xl", lg: "2xl" }}
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     Office Hours
                   </Text>
                   <Text
                     fontFamily="'Source Sans Pro', sans-serif"
-                    fontSize="xl"
+                    fontSize={{ base: "sm", md: "xl", lg: "xl" }}
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     Open daily 8:00 am - 7:00 pm
                   </Text>
                   <Text
-                    fontFamily="'Source Sans Pro', sans-serif"
-                    fontSize="xl"
+                    fontFamily="'Source Sans Pro', sans-serif'"
+                    fontSize={{ base: "sm", md: "xl", lg: "xl" }}
+                    textAlign={{ base: "center", md: "left", lg: "left" }}
                   >
                     Appointments outside office hours available upon request.
                     Just call!
                   </Text>
                 </VStack>
               </VStack>
-            </HStack>
+            </Stack>
           </VStack>
         </Box>
       </Flex>
