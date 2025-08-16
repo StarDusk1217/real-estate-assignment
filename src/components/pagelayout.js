@@ -118,7 +118,7 @@ export default function Pagelayout({ children }) {
 
         {/* MAIN CONTENT AREA */}
         <VStack
-          width={{ base: "80%", md: "90%", lg: "100%" }}
+          width={{ base: "100%", md: "100%", lg: "100%" }}
           bg="#FFFFFF"
           flex="1"
           mt={5}
