@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PageLayout from "../components/pagelayout";
+import Footer from "../components/footer";
 import {
   Box,
   Image,
@@ -169,7 +170,12 @@ function Index() {
                     <Text fontSize={50}>{slides[index].subtitle}</Text>
                   )}
                   {slides[index].paragraph && (
-                    <Text fontSize={25} maxW="900px">
+                    <Text
+                      fontSize={25}
+                      maxW="900px"
+                      fontFamily="'Source Sans Pro', sans-serif"
+                      textTransform="none"
+                    >
                       {slides[index].paragraph}
                     </Text>
                   )}
@@ -240,25 +246,48 @@ function Index() {
       </Box>
       <Flex w="100%" h="550px" align="center" justify="center">
         <Box w="60%" position="relative">
-          <Text fontSize="30px" textAlign="left" fontWeight="bold">
+          <Text
+            fontSize="30px"
+            textAlign="left"
+            fontWeight="bold"
+            fontFamily="'Cinzel', serif"
+          >
             // ABOUT
           </Text>
           <HStack gap={20}>
             <VStack spacing={6} align="left">
-              <Text fontSize="lg" textAlign="left" fontWeight="bold">
+              <Text
+                fontSize="2xl"
+                textAlign="left"
+                fontWeight="bold"
+                fontFamily="'Cinzel', serif"
+              >
                 Marci J Metzger
               </Text>
               Marci J Metzger
-              <Text fontSize="lg" textAlign="left">
+              <Text
+                fontSize="lg"
+                textAlign="left"
+                fontFamily="'Source Sans Pro', sans-serif"
+              >
                 Marci was a REALTOR, then licensed Broker, in Washington State.
                 Now, she is enjoying the sunshine, and helping clients in
                 Southern Nevada. Having helped buyers and sellers in many
                 markets since 1995, she is a wealth of knowledge.
               </Text>
-              <Text fontSize="lg" textAlign="left" fontWeight="bold">
+              <Text
+                fontSize="2xl"
+                textAlign="left"
+                fontWeight="bold"
+                fontFamily="'Cinzel', serif"
+              >
                 In Her Words
               </Text>
-              <Text fontSize="lg" textAlign="left">
+              <Text
+                fontSize="lg"
+                textAlign="left"
+                fontFamily="'Source Sans Pro', sans-serif"
+              >
                 "I love that small-town feeling that our community offers.
                 Spectacular golf courses, parks, pool, and easy access to Las
                 Vegas make Pahrump a great place to call home. Working or
@@ -456,7 +485,7 @@ function Index() {
           fontSize="3xl"
           fontWeight="bold"
           position="absolute"
-          top="20px"
+          top="50px"
           left="50%"
           transform="translateX(-50%)"
           color="#161616"
@@ -468,101 +497,197 @@ function Index() {
 
         {/* Smaller Photo Gallery Box */}
         <Box
-          w="70%"
-          h="90%"
+          w="80%"
+          h="800px"
           position="relative"
-          bg="#f0f0f0"
+          margin="auto"
+          overflow="visible"
+          mt={10}
+          bg="#e8dfd2"
           borderRadius="md"
-          overflow="hidden"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          marginTop={5}
-          border="2px solid black"
-          role="group" // Enable _groupHover for children
+          role="group" // enable group hover for buttons
         >
-          {photoList.map((photo, idx) => (
-            <Image
-              key={idx}
-              src={photo}
-              position="absolute"
-              w="90%"
-              h="90%"
-              objectFit="cover"
-              transition="opacity 0.8s ease-in-out"
-              opacity={idx === currentPhoto ? 1 : 0}
-              zIndex={idx === currentPhoto ? 1 : 0}
-              border="2px solid black"
-              borderRadius="md"
-            />
-          ))}
-
           {/* Previous Button */}
           <IconButton
-            icon={<ChevronLeftIcon />}
+            icon={<ChevronLeftIcon color="black" boxSize={8} />}
             position="absolute"
             top="50%"
             left="10px"
             transform="translateY(-50%)"
-            zIndex={3}
+            zIndex={5}
             onClick={() =>
               setCurrentPhoto(
                 (prev) => (prev - 1 + photoList.length) % photoList.length
               )
             }
-            aria-label="Previous"
-            bg="rgba(0,0,0,0.5)"
-            color="white"
-            _hover={{ bg: "rgba(0,0,0,0.7)" }}
-            opacity={0} // hidden by default
-            transition="opacity 0.3s"
+            aria-label="Previous Photo"
+            bg="transparent"
+            _hover={{ bg: "transparent" }}
+            opacity={0} // initially hidden
+            transition="opacity 0.3s ease"
             _groupHover={{ opacity: 1 }} // show on hover
           />
 
           {/* Next Button */}
           <IconButton
-            icon={<ChevronRightIcon />}
+            icon={<ChevronRightIcon color="black" boxSize={8} />}
             position="absolute"
             top="50%"
             right="10px"
             transform="translateY(-50%)"
-            zIndex={3}
+            zIndex={5}
             onClick={() =>
               setCurrentPhoto((prev) => (prev + 1) % photoList.length)
             }
-            aria-label="Next"
-            bg="rgba(0,0,0,0.5)"
-            color="white"
-            _hover={{ bg: "rgba(0,0,0,0.7)" }}
-            opacity={0} // hidden by default
-            transition="opacity 0.3s"
+            aria-label="Next Photo"
+            bg="transparent"
+            _hover={{ bg: "transparent" }}
+            opacity={0} // initially hidden
+            transition="opacity 0.3s ease"
             _groupHover={{ opacity: 1 }} // show on hover
           />
 
-          {/* Carousel Indicators */}
-          <HStack
-            spacing={3}
-            position="absolute"
-            bottom="15px"
-            left="50%"
-            transform="translateX(-50%)"
-            zIndex={3}
-          >
-            {photoList.map((_, idx) => (
-              <Box
-                key={idx}
-                w={idx === currentPhoto ? "10px" : "8px"}
-                h={idx === currentPhoto ? "10px" : "8px"}
-                borderRadius="full"
-                bg={idx === currentPhoto ? "black" : "gray.400"}
-                cursor="pointer"
-                onClick={() => setCurrentPhoto(idx)}
-                transition="all 0.3s"
-              />
-            ))}
-          </HStack>
+          <AnimatePresence initial={false}>
+            {photoList.map((photo, idx) => {
+              let position = idx - currentPhoto;
+              const half = Math.floor(photoList.length / 2);
+
+              // Circular wrap-around
+              if (position < -half) position += photoList.length;
+              if (position > half) position -= photoList.length;
+
+              return (
+                <MotionBox
+                  key={idx}
+                  position="absolute"
+                  top="20%"
+                  left="25%"
+                  w="800px"
+                  h="530px" // taller card height
+                  borderRadius="md"
+                  overflow="hidden"
+                  boxShadow="lg"
+                  bg="white" // card background
+                  cursor="default"
+                  zIndex={position === 0 ? 2 : 1}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{
+                    opacity: Math.abs(position) > 1 ? 0 : 1,
+                    scale: position === 0 ? 1 : 0.8,
+                    x: position * 220,
+                    rotateY: position * 20,
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                  {/* Inner image box */}
+                  <Box
+                    w="100%"
+                    h="500px" // keep the image height fixed
+                    p={4}
+                    overflow="hidden"
+                    borderRadius="md"
+                  >
+                    <Image src={photo} w="100%" h="100%" objectFit="cover" />
+                  </Box>
+                </MotionBox>
+              );
+            })}
+          </AnimatePresence>
         </Box>
       </Flex>
+      <Flex w="100%" h="550px" align="center" justify="center" p="36">
+        <VStack>
+          <Text
+            fontFamily="'Cinzel', serif"
+            fontSize="5xl"
+            marginTop="20"
+            marginBottom="10"
+          >
+            OUR SERVICES
+          </Text>
+          <HStack spacing={0} justify="center" align="center">
+            <VStack spacing={4} align="center">
+              <Image src="assets/services1.png" />
+              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                Real Estate Done Right
+              </Text>
+              <Text
+                fontSize="lg"
+                textAlign="center"
+                fontFamily="'Source Sans Pro', sans-serif"
+                marginLeft="20"
+                marginRight="20"
+              >
+                Nervous about your property adventure? Don’t be. Whether you're
+                getting ready to buy or sell your residence, looking at
+                investment properties, or just curious about the markets, our
+                team ensures you get the best experience possible!
+              </Text>
+            </VStack>
+
+            <VStack spacing={4} align="center">
+              <Image src="assets/services2.png" />
+              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                Commercial & Residential
+              </Text>
+              <Text
+                fontSize="lg"
+                textAlign="center"
+                fontFamily="'Source Sans Pro', sans-serif"
+                marginLeft="20"
+                marginRight="20"
+              >
+                Large or small, condo or mansion, we can find it and get at the
+                price that's right. Fixer-uppers? Luxury? We can help with all
+                of it! We live, work, and play in this community. Happy to help
+                you find where to put you hard-earned dollars.
+              </Text>
+            </VStack>
+
+            <VStack spacing={4} align="center">
+              <Image src="assets/services3.png" />
+              <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                Rely on Expertise
+              </Text>
+              <Text
+                fontSize="lg"
+                textAlign="center"
+                fontFamily="'Source Sans Pro', sans-serif"
+                marginLeft="20"
+                marginRight="20"
+              >
+                If you have questions about affordability, credit, and loan
+                options, trust us to connect you with the right people to get
+                the answers you need in a timely fashion. We make sure you feel
+                confident and educated every step of the way.
+              </Text>
+            </VStack>
+          </HStack>
+        </VStack>
+      </Flex>
+      <Flex
+        w="100%"
+        h="400px"
+        align="center"
+        justify="center"
+        justifyContent="space-evenly"
+        marginTop="20"
+      >
+        <HStack>
+          <Image src="assets/legal1.png" />
+        </HStack>
+        <HStack>
+          <Image src="assets/legal2.png" />
+        </HStack>
+        <HStack>
+          <Image src="assets/legal3.png" />
+        </HStack>
+        <HStack>
+          <Image src="assets/legal4.png" />
+        </HStack>
+      </Flex>
+      <Footer />
     </PageLayout>
   );
 }
