@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -7,14 +7,25 @@ import {
   Image,
   HStack,
   VStack,
+  IconButton,
+  Drawer,
+  DrawerBody,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import "@fontsource/cinzel/400.css";
 import "@fontsource/cinzel/700.css";
 import "@fontsource/source-sans-pro/400.css";
 import "@fontsource/source-sans-pro/700.css";
 
 export default function Pagelayout({ children }) {
-  const cancelRef = React.useRef();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+
+  const navItems = ["HOME", "LISTINGS", "LET'S MOVE", "ABOUT US"];
 
   return (
     <ChakraProvider>
@@ -46,25 +57,63 @@ export default function Pagelayout({ children }) {
             />
           </Flex>
 
-          {/* Navigation */}
-          <Flex flex={{ base: 1 }} justify={{ base: "center", md: "flex-end" }}>
-            <HStack spacing={{ base: 3, md: 6 }} wrap="wrap" textAlign="center">
-              {["HOME", "LISTINGS", "LET'S MOVE", "ABOUT US"].map(
-                (item, index) => (
-                  <Text
-                    key={index}
-                    fontFamily="'Cinzel', serif"
-                    fontSize={{ base: "md", md: "2xl" }}
-                    fontWeight="medium"
-                    cursor="pointer"
-                    _hover={{ color: "gray.500" }}
-                  >
-                    {item}
-                  </Text>
-                )
-              )}
-            </HStack>
-          </Flex>
+          {/* Desktop Navigation */}
+          <HStack
+            spacing={{ base: 0, md: 6 }}
+            display={{ base: "none", md: "flex" }}
+            textAlign="center"
+          >
+            {navItems.map((item, index) => (
+              <Text
+                key={index}
+                fontFamily="'Cinzel', serif"
+                fontSize={{ base: "md", md: "2xl" }}
+                fontWeight="medium"
+                cursor="pointer"
+                _hover={{ color: "gray.500" }}
+              >
+                {item}
+              </Text>
+            ))}
+          </HStack>
+
+          {/* Mobile Hamburger Button */}
+          <IconButton
+            aria-label="Open Menu"
+            icon={<HamburgerIcon />}
+            size="lg"
+            display={{ base: "flex", md: "none" }}
+            onClick={onOpen}
+          />
+
+          {/* Mobile Drawer */}
+          <Drawer
+            isOpen={isOpen}
+            placement="right"
+            onClose={onClose}
+            finalFocusRef={btnRef}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerBody>
+                <VStack spacing={6} mt={10}>
+                  {navItems.map((item, index) => (
+                    <Text
+                      key={index}
+                      fontFamily="'Cinzel', serif"
+                      fontSize="2xl"
+                      fontWeight="medium"
+                      cursor="pointer"
+                      onClick={onClose} // closes drawer on click
+                    >
+                      {item}
+                    </Text>
+                  ))}
+                </VStack>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
         </Flex>
 
         {/* MAIN CONTENT AREA */}
