@@ -658,8 +658,8 @@ function Index() {
                 marginRight="20"
               >
                 Nervous about your property adventure? Don&apos;t be. Whether
-                you're getting ready to buy or sell your residence, looking at
-                investment properties, or just curious about the markets, our
+                you&apos;re getting ready to buy or sell your residence, looking
+                at investment properties, or just curious about the markets, our
                 team ensures you get the best experience possible!
               </Text>
             </VStack>
