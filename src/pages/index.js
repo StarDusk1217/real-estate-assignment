@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PageLayout from "../components/pagelayout";
 import Footer from "../components/footer";
 import {
@@ -81,9 +81,13 @@ function Index() {
 
   const [index, setIndex] = useState(0);
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
-  const prevSlide = () =>
+  const nextSlide = useCallback(() => {
+    setIndex((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
+
+  const prevSlide = useCallback(() => {
     setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
 
   useEffect(() => {
     const timer = setInterval(nextSlide, 10000);
@@ -280,7 +284,7 @@ function Index() {
             fontWeight="bold"
             fontFamily="'Cinzel', serif"
           >
-            // ABOUT
+            {/* ABOUT */}
           </Text>
           <HStack gap={20}>
             <VStack spacing={6} align="left">
@@ -292,7 +296,6 @@ function Index() {
               >
                 Marci J Metzger
               </Text>
-              Marci J Metzger
               <Text
                 fontSize="lg"
                 textAlign="left"
@@ -316,19 +319,20 @@ function Index() {
                 textAlign="left"
                 fontFamily="'Source Sans Pro', sans-serif"
               >
-                "I love that small-town feeling that our community offers.
+                &quot;I love that small-town feeling that our community offers.
                 Spectacular golf courses, parks, pool, and easy access to Las
                 Vegas make Pahrump a great place to call home. Working or
-                retired, fast-paced or looking to relax... there's a place for
-                you here! I enjoy living in the Mountain Falls community and
+                retired, fast-paced or looking to relax... there&apos;s a place
+                for you here! I enjoy living in the Mountain Falls community and
                 will strive to find you a home that will suit you just as this
-                community does me."
+                community does me.&quot;
               </Text>
             </VStack>
             <Image src="/assets/about.png" width="50%" h="50%" alt="about" />
           </HStack>
         </Box>
       </Flex>
+
       <Flex w="100%" h="550px">
         <Box
           w="65%"
@@ -653,8 +657,8 @@ function Index() {
                 marginLeft="20"
                 marginRight="20"
               >
-                Nervous about your property adventure? Don’t be. Whether you're
-                getting ready to buy or sell your residence, looking at
+                Nervous about your property adventure? Don&apos;t be. Whether
+                you're getting ready to buy or sell your residence, looking at
                 investment properties, or just curious about the markets, our
                 team ensures you get the best experience possible!
               </Text>
@@ -673,9 +677,9 @@ function Index() {
                 marginRight="20"
               >
                 Large or small, condo or mansion, we can find it and get at the
-                price that's right. Fixer-uppers? Luxury? We can help with all
-                of it! We live, work, and play in this community. Happy to help
-                you find where to put you hard-earned dollars.
+                price that&apos;s right. Fixer-uppers? Luxury? We can help with
+                all of it! We live, work, and play in this community. Happy to
+                help you find where to put you hard-earned dollars.
               </Text>
             </VStack>
 
