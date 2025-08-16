@@ -27,14 +27,11 @@ export default function Pagelayout({ children }) {
       >
         {/* HEADER / NAVBAR */}
         <Flex
-          h={{ base: "12vh", md: "10vh" }}
+          h={{ base: "15vh", md: "12vh", lg: "10vh" }}
           w="100%"
-          color="Black"
           align="center"
-          position="relative"
-          zIndex={1}
-          justifyContent="space-between"
-          px={{ base: 2, md: 4 }}
+          justify="space-between"
+          px={{ base: 2, md: 4, lg: 6 }}
         >
           <Flex
             flex={{ base: 1 }}
@@ -45,22 +42,22 @@ export default function Pagelayout({ children }) {
             <Image
               src="/assets/logo.jpeg"
               alt="POS System Logo"
-              width={{ base: "150px", md: "350px" }}
+              width={{ base: "120px", md: "250px", lg: "350px" }} // mobile, tablet, desktop
               height="auto"
               objectFit="contain"
             />
           </Flex>
 
           <Flex
-            flex={{ base: 1, md: 1 }}
-            justify={"flex-end"}
-            marginTop={5}
-            marginRight={100}
+            flex={{ base: 1 }}
+            justify={{ base: "center", md: "flex-end" }}
+            mt={{ base: 2, md: 5 }}
+            mr={{ base: 2, md: 100 }}
           >
-            <HStack spacing={6}>
+            <HStack spacing={{ base: 4, md: 6 }} wrap="wrap">
               <Text
                 fontFamily="'Cinzel', serif"
-                fontSize="2xl"
+                fontSize={{ base: "md", md: "2xl" }}
                 fontWeight="thin"
                 cursor="pointer"
                 _hover={{ color: "gray.500" }} // optional hover effect
@@ -69,7 +66,7 @@ export default function Pagelayout({ children }) {
               </Text>
               <Text
                 fontFamily="'Cinzel', serif"
-                fontSize="2xl"
+                fontSize={{ base: "md", md: "2xl" }}
                 fontWeight="medium"
                 cursor="pointer"
                 _hover={{ color: "gray.500" }}
@@ -78,7 +75,7 @@ export default function Pagelayout({ children }) {
               </Text>
               <Text
                 fontFamily="'Cinzel', serif"
-                fontSize="2xl"
+                fontSize={{ base: "md", md: "2xl" }}
                 fontWeight="medium"
                 cursor="pointer"
                 _hover={{ color: "gray.500" }}
@@ -87,7 +84,7 @@ export default function Pagelayout({ children }) {
               </Text>
               <Text
                 fontFamily="'Cinzel', serif"
-                fontSize="2xl"
+                fontSize={{ base: "md", md: "2xl" }}
                 fontWeight="medium"
                 cursor="pointer"
                 _hover={{ color: "gray.500" }}
@@ -100,12 +97,13 @@ export default function Pagelayout({ children }) {
 
         {/* MAIN CONTENT AREA */}
         <VStack
-          width="100%"
+          width={{ base: "90%", md: "95%", lg: "100%" }}
           bg="#FFFFFF"
           flex="1"
-          marginTop={5}
+          mt={5}
           align="stretch"
           spacing={0}
+          mx="auto" // centers content horizontally
         >
           {children}
         </VStack>
