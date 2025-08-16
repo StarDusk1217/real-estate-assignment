@@ -18,7 +18,13 @@ export default function pagelayout({ children }) {
 
   return (
     <ChakraProvider>
-      <Box minH="150vh" bg="#FFFFFF" display="flex" flexDirection="column">
+      <Box
+        minH="150vh"
+        bg="#FFFFFF"
+        display="flex"
+        flexDirection="column"
+        maxW="2000px"
+      >
         {/* HEADER / NAVBAR */}
         <Flex
           h={{ base: "12vh", md: "10vh" }}
@@ -53,30 +59,38 @@ export default function pagelayout({ children }) {
           >
             <HStack spacing={6}>
               <Text
-                fontFamily="Source Sans Pro"
-                fontSize={20}
-                fontWeight="medium"
+                fontFamily="'Cinzel', serif"
+                fontSize="2xl"
+                fontWeight="thin"
+                cursor="pointer"
+                _hover={{ color: "gray.500" }} // optional hover effect
               >
                 HOME
               </Text>
               <Text
-                fontFamily="Source Sans Pro"
-                fontSize={20}
+                fontFamily="'Cinzel', serif"
+                fontSize="2xl"
                 fontWeight="medium"
+                cursor="pointer"
+                _hover={{ color: "gray.500" }}
               >
                 LISTINGS
               </Text>
               <Text
-                fontFamily="Source Sans Pro"
-                fontSize={20}
+                fontFamily="'Cinzel', serif"
+                fontSize="2xl"
                 fontWeight="medium"
+                cursor="pointer"
+                _hover={{ color: "gray.500" }}
               >
                 LET'S MOVE
               </Text>
               <Text
-                fontFamily="Source Sans Pro"
-                fontSize={20}
+                fontFamily="'Cinzel', serif"
+                fontSize="2xl"
                 fontWeight="medium"
+                cursor="pointer"
+                _hover={{ color: "gray.500" }}
               >
                 ABOUT US
               </Text>
