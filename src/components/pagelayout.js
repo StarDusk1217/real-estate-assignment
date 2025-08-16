@@ -35,7 +35,9 @@ export default function Pagelayout({ children }) {
         display="flex"
         flexDirection="column"
         maxW="2000px"
+        w="100%" // make sure it takes full viewport width
         mx="auto"
+        overflowX="hidden" // prevent horizontal scroll/blank space
       >
         {/* HEADER / NAVBAR */}
         <Flex
@@ -45,13 +47,15 @@ export default function Pagelayout({ children }) {
           align="center"
           justify="space-between"
           px={{ base: 4, md: 8, lg: 16 }}
+          position="relative"
+          zIndex={10}
         >
           {/* Logo */}
           <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
             <Image
               src="/assets/logo.jpeg"
               alt="POS System Logo"
-              width={{ base: "120px", md: "250px", lg: "350px" }}
+              maxW={{ base: "120px", md: "250px", lg: "350px" }}
               height="auto"
               objectFit="contain"
             />
@@ -84,6 +88,7 @@ export default function Pagelayout({ children }) {
             size="lg"
             display={{ base: "flex", md: "none" }}
             onClick={onOpen}
+            zIndex={11}
           />
 
           {/* Mobile Drawer */}
@@ -92,6 +97,7 @@ export default function Pagelayout({ children }) {
             placement="right"
             onClose={onClose}
             finalFocusRef={btnRef}
+            size="xs"
           >
             <DrawerOverlay />
             <DrawerContent>
@@ -105,7 +111,7 @@ export default function Pagelayout({ children }) {
                       fontSize="2xl"
                       fontWeight="medium"
                       cursor="pointer"
-                      onClick={onClose} // closes drawer on click
+                      onClick={onClose}
                     >
                       {item}
                     </Text>
@@ -118,7 +124,7 @@ export default function Pagelayout({ children }) {
 
         {/* MAIN CONTENT AREA */}
         <VStack
-          width={{ base: "100%", md: "100%", lg: "100%" }}
+          width="100%"
           bg="#FFFFFF"
           flex="1"
           mt={5}
