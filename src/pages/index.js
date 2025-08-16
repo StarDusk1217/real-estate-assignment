@@ -13,6 +13,8 @@ import {
   Input,
   Button,
   Center,
+  chakra,
+  Textarea,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
@@ -50,6 +52,31 @@ function Index() {
       textPosition: "left", // left for image5
     },
   ];
+
+  const Label = chakra("label", {
+    baseStyle: {
+      position: "absolute",
+      bg: "white",
+      px: 2,
+      top: "12px",
+      left: 3,
+      fontWeight: "normal",
+      pointerEvents: "none",
+      transition: "all 0.2s ease",
+      _peerPlaceholderShown: {
+        color: "black",
+        top: "12px",
+        left: 3,
+        fontSize: "md",
+      },
+      _peerFocus: {
+        color: "black",
+        top: "-8px",
+        left: 2,
+        fontSize: "sm",
+      },
+    },
+  });
 
   const [index, setIndex] = useState(0);
 
@@ -687,6 +714,127 @@ function Index() {
           <Image src="assets/legal4.png" />
         </HStack>
       </Flex>
+      <Flex w="100%" h="600px" align="center" justify="center">
+        <Box w="80%" h="100%" padding={10}>
+          <VStack w="100%" spacing={8} align="center">
+            <Text fontSize="4xl" fontWeight="bold" fontFamily="'Cinzel', serif">
+              CALL OR VISIT
+            </Text>
+
+            {/* Main content: Form + Contact Info */}
+            <HStack w="100%" spacing={12} align="start" justify="space-between">
+              {/* Form Section */}
+              <VStack w="50%" spacing={6} align="stretch" padding={5}>
+                <Text
+                  fontSize="2xl"
+                  fontWeight="medium"
+                  textAlign="left"
+                  fontFamily="'Source Sans Pro', sans-serif"
+                >
+                  Send Message
+                </Text>
+
+                <Box position="relative" w="full">
+                  <Input
+                    className="peer"
+                    placeholder=" "
+                    size="lg"
+                    variant="flushed"
+                  />
+                  <Label fontFamily="'Source Sans Pro', sans-serif">Name</Label>
+                </Box>
+
+                <Box position="relative" w="full">
+                  <Input
+                    className="peer"
+                    placeholder=" "
+                    size="lg"
+                    variant="flushed"
+                  />
+                  <Label fontFamily="'Source Sans Pro', sans-serif">
+                    Email
+                  </Label>
+                </Box>
+
+                <Box position="relative" w="full">
+                  <Textarea
+                    className="peer"
+                    placeholder=" "
+                    size="lg"
+                    variant="flushed"
+                  />
+                  <Label fontFamily="'Source Sans Pro', sans-serif">
+                    Message
+                  </Label>
+                </Box>
+
+                <Button
+                  w="150px"
+                  h="60px"
+                  borderRadius="30px"
+                  fontSize="md"
+                  alignSelf="center"
+                  fontFamily="'Source Sans Pro', sans-serif"
+                >
+                  SEND
+                </Button>
+                <Text fontSize="sm" textAlign="center">
+                  This site is protected by reCAPTCHA and the Google Privacy
+                  Policy and Terms of Service apply.
+                </Text>
+              </VStack>
+
+              {/* Contact Info Section */}
+              <VStack w="50%" spacing={6} align="start" padding={5}>
+                <VStack align="start" spacing={8}>
+                  <Text
+                    fontWeight="bold"
+                    fontSize="2xl"
+                    fontFamily="'Cinzel', serif"
+                  >
+                    Marci Metzger - THE RIDGE REALTY GROUP
+                  </Text>
+                  <Text
+                    fontFamily="'Source Sans Pro', sans-serif"
+                    fontSize="xl"
+                  >
+                    3190 HW-160, Suite F, Pahrump, Nevada 89048, United States
+                  </Text>
+                  <Text
+                    fontFamily="'Source Sans Pro', sans-serif"
+                    fontSize="xl"
+                  >
+                    (206) 919-6886
+                  </Text>
+                </VStack>
+                <VStack align="start">
+                  <Text
+                    fontWeight="bold"
+                    fontFamily="'Cinzel', serif"
+                    fontSize="2xl"
+                  >
+                    Office Hours
+                  </Text>
+                  <Text
+                    fontFamily="'Source Sans Pro', sans-serif"
+                    fontSize="xl"
+                  >
+                    Open daily 8:00 am - 7:00 pm
+                  </Text>
+                  <Text
+                    fontFamily="'Source Sans Pro', sans-serif"
+                    fontSize="xl"
+                  >
+                    Appointments outside office hours available upon request.
+                    Just call!
+                  </Text>
+                </VStack>
+              </VStack>
+            </HStack>
+          </VStack>
+        </Box>
+      </Flex>
+
       <Footer />
     </PageLayout>
   );
