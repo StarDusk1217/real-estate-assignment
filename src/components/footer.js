@@ -15,13 +15,13 @@ const SocialButton = ({ children, label, href }) => {
     <chakra.button
       bg="whiteAlpha.100"
       rounded="full"
-      w={10} // increased from 8
-      h={10} // increased from 8
+      w={{ base: 8, md: 10 }} // smaller on mobile, larger on desktop
+      h={{ base: 8, md: 10 }}
       cursor="pointer"
       as="a"
       href={href}
-      target="_blank" // opens in a new tab
-      rel="noopener noreferrer" // security best practice
+      target="_blank"
+      rel="noopener noreferrer"
       display="inline-flex"
       alignItems="center"
       justifyContent="center"
@@ -30,7 +30,7 @@ const SocialButton = ({ children, label, href }) => {
         bg: "whiteAlpha.300",
       }}
       color="white"
-      fontSize="2xl" // increase icon size
+      fontSize={{ base: "xl", md: "2xl" }} // icon size responsive
     >
       <VisuallyHidden>{label}</VisuallyHidden>
       {children}
@@ -40,10 +40,17 @@ const SocialButton = ({ children, label, href }) => {
 
 export default function Footer() {
   return (
-    <Box bg="black" color="white" minH="200px" py={8}>
+    <Box bg="black" color="white" py={8}>
       <Container maxW="6xl">
         <VStack spacing={6}>
-          <Stack direction="row" spacing={6}>
+          {/* Social Icons */}
+          <Stack
+            direction={{ base: "column", sm: "row" }}
+            spacing={{ base: 4, sm: 6 }}
+            align="center"
+            justify="center"
+            w="full"
+          >
             <SocialButton
               label="Facebook"
               href="https://www.facebook.com/MarciHomes/"
@@ -69,7 +76,14 @@ export default function Footer() {
               <FaYelp />
             </SocialButton>
           </Stack>
-          <Text>© 2025 Marci METZGER Homes. All rights reserved</Text>
+
+          {/* Footer Text */}
+          <Text
+            textAlign={{ base: "center", sm: "center" }}
+            fontSize={{ base: "sm", md: "md" }}
+          >
+            © 2025 Marci METZGER Homes. All rights reserved
+          </Text>
         </VStack>
       </Container>
     </Box>
